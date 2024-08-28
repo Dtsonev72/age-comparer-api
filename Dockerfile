@@ -1,12 +1,23 @@
-# Build stage
-FROM golang:1.20-alpine AS builder
-WORKDIR /app
-COPY . .
-RUN go mod download
-RUN go build -o receipt-processor-api ./cmd/server
+# Use Node.js 16 as the base image
+FROM node:20
 
-# Run stage
-FROM alpine:3.18
+# Set the working directory inside the container
 WORKDIR /app
-COPY --from=builder /app/receipt-processor-api .
-CMD ["./receipt-processor-api"]
+
+# Copy package.json and package-lock.json
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the application code
+COPY . .
+
+# Build the TypeScript code
+RUN npm run build
+
+# Expose the port the app runs on
+EXPOSE 3000
+
+# Command to run the application
+CMD ["node", "dist/server.js"]
