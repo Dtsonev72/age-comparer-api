@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a web service that processes receipts and calculates points based on given rules.
+This is a service that gets your age and checks it against people in your age group
 
 ## Running the Application
 
